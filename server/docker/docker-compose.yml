@@ -16,8 +16,10 @@ services:
     # healthcheck:
     #   test: ["CMD", "mysqladmin", "ping", "--silent"]
   zanata:
-    # build: .
-    image: zanata-dev
+    depends_on:
+      zanatadb:
+        condition: service_healthy
+    build: .
     links:
       - zanatadb
     environment:
