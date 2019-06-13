@@ -6,6 +6,7 @@ branches:
   only:
   - master
   - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+  - /^release\/.*$/
 env:
   - NODE_OPTIONS=--max_old_space_size=4096 IMAGE_NAME=porscheinformatik/zanata-server
 install: true
@@ -15,7 +16,7 @@ script:
   - docker build -t $IMAGE_NAME ./server/docker
 deploy:
   - provider: script
-    script: bash docker_push master
+    script: bash docker_push ${TRAVIS_BRANCH}
     on:
       branch: master
   - provider: script
