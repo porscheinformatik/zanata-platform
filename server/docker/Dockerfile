@@ -1,4 +1,4 @@
-FROM jboss/wildfly:10.1.0.Final
+FROM jboss/wildfly:14.0.1.Final
 
 EXPOSE 8080
 # Version should be assigned in build time
@@ -28,10 +28,12 @@ RUN mkdir -p $ZANATA_HOME && chown -R jboss.jboss $ZANATA_HOME
 VOLUME $ZANATA_HOME
 
 # Make the image Openshift compatible by granting root group (not user) access to the necessary directories
-RUN chgrp -R 0 $ZANATA_HOME /opt/jboss/wildfly
-RUN chmod -R g+rw $ZANATA_HOME /opt/jboss/wildfly
-RUN find $ZANATA_HOME -type d -exec chmod g+x {} +
-RUN find /opt/jboss/wildfly -type d -exec chmod g+x {} +
+RUN chgrp -R 0 $ZANATA_HOME /opt/jboss/wildfly \
+ && chmod -R g+rw $ZANATA_HOME /opt/jboss/wildfly \
+ && find $ZANATA_HOME -type d -exec chmod g+x {} + \
+ && find /opt/jboss/wildfly -type d -exec chmod g+x {} +
+
+RUN yum update && yum clean all
 
 USER jboss
 
